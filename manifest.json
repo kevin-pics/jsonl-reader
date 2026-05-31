@@ -1,0 +1,55 @@
+{
+  "manifest_version": 3,
+  "name": "JSONL Reader",
+  "version": "0.1.0",
+  "description": "View JSON Lines / NDJSON files with each line collapsed by default.",
+  "action": {
+    "default_title": "JSONL Reader",
+    "default_popup": "popup.html"
+  },
+  "permissions": [
+    "declarativeNetRequest",
+    "webNavigation"
+  ],
+  "background": {
+    "service_worker": "src/background.js"
+  },
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*",
+    "file:///*"
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "viewer.html",
+        "src/*"
+      ],
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ]
+    }
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "http://*/*.jsonl*",
+        "https://*/*.jsonl*",
+        "file:///*.jsonl*",
+        "http://*/*.ndjson*",
+        "https://*/*.ndjson*",
+        "file:///*.ndjson*"
+      ],
+      "js": [
+        "src/jsonl-renderer.js",
+        "src/content.js"
+      ],
+      "css": [
+        "src/hide.css",
+        "src/content.css"
+      ],
+      "run_at": "document_start"
+    }
+  ]
+}

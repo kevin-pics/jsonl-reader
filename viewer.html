@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>JSONL Reader</title>
+    <link rel="stylesheet" href="src/content.css">
+    <link rel="stylesheet" href="src/viewer.css">
+  </head>
+  <body>
+    <section id="loader" class="jsonlr-loader">
+      <div class="jsonlr-loader-card">
+        <h1>JSONL Reader</h1>
+        <p>Open a <code>.jsonl</code> / <code>.ndjson</code> file. Every line is collapsed by default and can be expanded for formatted JSON.</p>
+
+        <label class="jsonlr-dropzone" for="fileInput">
+          <strong>Choose a JSONL file</strong>
+          <span>or drag and drop it here</span>
+          <input id="fileInput" type="file" accept=".jsonl,.ndjson,application/json,text/plain">
+        </label>
+
+        <form id="urlForm" class="jsonlr-url-form">
+          <input id="urlInput" type="url" placeholder="https://example.com/data.jsonl">
+          <button type="submit">Open URL</button>
+        </form>
+
+        <textarea id="pasteInput" rows="6" placeholder='Paste JSONL here, e.g.&#10;{"id":1,"name":"Ada"}&#10;{"id":2,"name":"Grace"}'></textarea>
+        <button id="pasteButton" type="button">Render pasted JSONL</button>
+
+        <p id="status" class="jsonlr-loader-status"></p>
+      </div>
+    </section>
+
+    <div id="viewer"></div>
+
+    <script src="src/jsonl-renderer.js"></script>
+    <script src="src/viewer.js"></script>
+  </body>
+</html>
