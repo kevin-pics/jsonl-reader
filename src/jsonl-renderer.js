@@ -87,18 +87,23 @@
     details.append(summary);
 
     details.addEventListener('toggle', () => {
-      if (!details.open || details.dataset.rendered === 'true') return;
-      details.dataset.rendered = 'true';
+      if (!details.open) return;
 
-      const body = el('div', 'jsonlr-row-body');
-      if (!parsed.ok) {
-        body.append(el('div', 'jsonlr-error-message', parsed.error));
+      if (details.dataset.rendered !== 'true') {
+        details.dataset.rendered = 'true';
+
+        const body = el('div', 'jsonlr-row-body');
+        if (!parsed.ok) {
+          body.append(el('div', 'jsonlr-error-message', parsed.error));
+        }
+
+        const pre = el('pre', 'jsonlr-code');
+        pre.textContent = parsed.ok ? JSON.stringify(parsed.value, null, 2) : line;
+        body.append(pre);
+        details.append(body);
       }
 
-      const pre = el('pre', 'jsonlr-code');
-      pre.textContent = parsed.ok ? JSON.stringify(parsed.value, null, 2) : line;
-      body.append(pre);
-      details.append(body);
+      details.dispatchEvent(new CustomEvent('jsonlr-row-opened', { bubbles: true }));
     });
 
     return details;
@@ -168,13 +173,31 @@
     if ('ResizeObserver' in window) new ResizeObserver(updateTopbarHeight).observe(topbar);
 
     const rows = Array.from(list.querySelectorAll('.jsonlr-row'));
+    const scrollRowUnderTopbar = (row) => {
+      const topbarHeight = Math.ceil(topbar.getBoundingClientRect().height);
+      const rowTop = row.getBoundingClientRect().top + window.scrollY;
+      window.scrollTo({
+        top: Math.max(0, rowTop - topbarHeight - 8),
+        behavior: 'smooth'
+      });
+    };
+
+    list.addEventListener('jsonlr-row-opened', (event) => {
+      if (list.dataset.suppressOpenScroll === 'true') return;
+      scrollRowUnderTopbar(event.target);
+    });
+
     search.addEventListener('input', () => {
       const query = search.value.trim().toLowerCase();
       rows.forEach((row) => {
         row.classList.toggle('is-search-match', query !== '' && row.dataset.raw.includes(query));
       });
     });
-    expandAll.addEventListener('click', () => rows.forEach((row) => { row.open = true; row.dispatchEvent(new Event('toggle')); }));
+    expandAll.addEventListener('click', () => {
+      list.dataset.suppressOpenScroll = 'true';
+      rows.forEach((row) => { row.open = true; row.dispatchEvent(new Event('toggle')); });
+      requestAnimationFrame(() => { delete list.dataset.suppressOpenScroll; });
+    });
     collapseAll.addEventListener('click', () => rows.forEach((row) => { row.open = false; }));
   }
 
