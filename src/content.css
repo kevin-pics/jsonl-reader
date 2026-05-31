@@ -6,10 +6,15 @@
   visibility: visible !important;
 }
 
+.jsonlr-extension-mounted,
+body.jsonlr-root {
+  overflow-x: hidden !important;
+}
+
 .jsonlr-extension-mounted body,
 body.jsonlr-root {
   visibility: visible !important;
-  width: 120% !important;
+  width: 100% !important;
   max-width: none !important;
   margin: 0 !important;
   background: #f6f8fb !important;
@@ -20,6 +25,7 @@ body.jsonlr-root {
 .jsonlr-app {
   max-width: 1416px;
   margin: 0 auto;
+  box-sizing: border-box;
   padding: 28px 20px 40px;
 }
 
@@ -219,10 +225,12 @@ body.jsonlr-root {
 .jsonlr-row-body {
   border-top: 1px solid #e2e8f0;
   background: #0f172a;
+  overflow: hidden;
   padding: 14px;
 }
 
 .jsonlr-code {
+  max-width: 100%;
   margin: 0;
   overflow: auto;
   color: #e2e8f0;
