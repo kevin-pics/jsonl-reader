@@ -8,7 +8,7 @@
 
 .jsonlr-extension-mounted,
 body.jsonlr-root {
-  overflow-x: hidden !important;
+  overflow-x: clip !important;
 }
 
 .jsonlr-extension-mounted body,
@@ -23,10 +23,24 @@ body.jsonlr-root {
 }
 
 .jsonlr-app {
+  --jsonlr-topbar-height: 156px;
   max-width: 1416px;
   margin: 0 auto;
   box-sizing: border-box;
-  padding: 28px 20px 40px;
+  padding: 0 20px 40px;
+}
+
+.jsonlr-topbar {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  z-index: 1000;
+  width: min(100%, 1416px);
+  box-sizing: border-box;
+  padding: 28px 20px 1px;
+  background: rgba(246, 248, 251, 0.96);
+  backdrop-filter: blur(10px);
+  transform: translateX(-50%);
 }
 
 .jsonlr-header {
@@ -85,16 +99,12 @@ body.jsonlr-root {
 }
 
 .jsonlr-toolbar {
-  position: sticky;
-  top: 0;
-  z-index: 5;
   border: 1px solid #e2e8f0;
   border-radius: 14px;
   background: rgba(255, 255, 255, 0.94);
   box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
   margin-bottom: 16px;
   padding: 12px;
-  backdrop-filter: blur(8px);
 }
 
 .jsonlr-search {
@@ -124,6 +134,7 @@ body.jsonlr-root {
 .jsonlr-list {
   display: grid;
   gap: 10px;
+  margin-top: var(--jsonlr-topbar-height);
 }
 
 .jsonlr-row {

@@ -122,6 +122,7 @@
     container.classList.add('jsonlr-root');
 
     const app = el('main', 'jsonlr-app');
+    const topbar = el('div', 'jsonlr-topbar');
     const header = el('header', 'jsonlr-header');
     const titleBlock = el('div', 'jsonlr-title-block');
     titleBlock.append(el('h1', null, title));
@@ -133,7 +134,7 @@
     stats.append(el('span', 'jsonlr-stat ok', `${validCount} valid`));
     if (invalidCount) stats.append(el('span', 'jsonlr-stat error', `${invalidCount} invalid`));
     header.append(stats);
-    app.append(header);
+    topbar.append(header);
 
     const toolbar = el('section', 'jsonlr-toolbar');
     const search = el('input', 'jsonlr-search');
@@ -144,7 +145,8 @@
     const expandAll = el('button', 'jsonlr-button', 'Expand all');
     const collapseAll = el('button', 'jsonlr-button', 'Collapse all');
     toolbar.append(expandAll, collapseAll);
-    app.append(toolbar);
+    topbar.append(toolbar);
+    app.append(topbar);
 
     const list = el('section', 'jsonlr-list');
     if (!lines.length) {
@@ -157,6 +159,13 @@
     const footer = el('footer', 'jsonlr-footer', 'Each JSONL line is collapsed by default. Click a row to inspect formatted JSON.');
     app.append(footer);
     container.append(app);
+
+    const updateTopbarHeight = () => {
+      app.style.setProperty('--jsonlr-topbar-height', `${Math.ceil(topbar.getBoundingClientRect().height) + 16}px`);
+    };
+    requestAnimationFrame(updateTopbarHeight);
+    window.addEventListener('resize', updateTopbarHeight);
+    if ('ResizeObserver' in window) new ResizeObserver(updateTopbarHeight).observe(topbar);
 
     const rows = Array.from(list.querySelectorAll('.jsonlr-row'));
     search.addEventListener('input', () => {
