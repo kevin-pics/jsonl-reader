@@ -75,6 +75,35 @@
     return node;
   }
 
+  function formatExpandedJson(value) {
+    const json = JSON.stringify(value, null, 2);
+    let output = '';
+    let inString = false;
+    let backslashRun = 0;
+
+    for (let index = 0; index < json.length; index += 1) {
+      const char = json[index];
+      const next = json[index + 1];
+
+      if (inString && char === '\\' && next === 'n' && backslashRun % 2 === 0) {
+        output += '\n';
+        index += 1;
+        backslashRun = 0;
+        continue;
+      }
+
+      output += char;
+
+      if (char === '"' && backslashRun % 2 === 0) {
+        inString = !inString;
+      }
+
+      backslashRun = char === '\\' ? backslashRun + 1 : 0;
+    }
+
+    return output;
+  }
+
   function renderRow(line, index) {
     const parsed = parseLine(line);
     const details = el('details', `jsonlr-row ${parsed.ok ? 'is-valid' : 'is-invalid'}${parsed.empty ? ' is-empty' : ''}`);
@@ -98,7 +127,7 @@
         }
 
         const pre = el('pre', 'jsonlr-code');
-        pre.textContent = parsed.ok ? JSON.stringify(parsed.value, null, 2) : line;
+        pre.textContent = parsed.ok ? formatExpandedJson(parsed.value) : line;
         body.append(pre);
         details.append(body);
       }
