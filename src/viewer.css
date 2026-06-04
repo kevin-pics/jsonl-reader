@@ -7,6 +7,10 @@
   box-sizing: border-box;
 }
 
+.jsonlr-loader[hidden] {
+  display: none !important;
+}
+
 .jsonlr-loader-card {
   width: min(720px, 100%);
   border: 1px solid #e2e8f0;
