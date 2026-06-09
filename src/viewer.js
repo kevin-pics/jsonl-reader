@@ -87,5 +87,7 @@
   if (initialUrl) {
     urlInput.value = initialUrl;
     openUrl(initialUrl).catch((error) => setStatus(`Unable to open URL: ${error.message}`));
+  } else {
+    loader.hidden = false;
   }
 })();
